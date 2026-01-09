@@ -1,5 +1,5 @@
 # stex-to-png-rs
-Rust port of the [python script](https://github.com/ClementineAccount/godot-stex-to-png) made by @ClementineAccount
+Rust port of the [python script](https://github.com/ClementineAccount/godot-stex-to-png) made by [@ClementineAccount](https://github.com/ClementineAccount)
 used to convert `.stex` files into readable `.png` files.
 
 ## Requirements
