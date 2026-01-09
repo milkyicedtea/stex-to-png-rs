@@ -1,0 +1,46 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build binaries
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build release
+        run: cargo build --release
+
+      - name: Prepare binary
+        shell: bash
+        run: |
+          mkdir dist
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            cp target/release/stex-to-png-rs.exe dist/
+          else
+            cp target/release/stex-to-png-rs dist/
+            # strip debug to rebuce size
+            strip dist/stex-to-png-rs
+            # make it executable
+            chmod +x dist/stex-to-png-rs
+          fi
+          
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
